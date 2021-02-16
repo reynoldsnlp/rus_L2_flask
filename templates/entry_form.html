@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>RuMOR: Russian Mentor for Orthographic Rules</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!--This tells flask where to find the css file.-->
+		<link rel="stylesheet" type="text/css" href={{ url_for('static', filename='css/main.css') }}>
+	</head>
+	<body>
+
+	<header>
+		<h3>Russian language analysis</h3>
+	</header>
+	<p>Enter a text to analyze.</p>
+	<form method="POST">
+		<textarea rows="15" cols="80" name="text" placeholder="Type or paste text here"></textarea>
+		<input type="submit" name="freq_form" value="Analyze">
+	</form>
+	<footer>
+		<p>Powered by <a href="https://github.com/reynoldsnlp/udar">udar</a>.</p>
+	</footer>
+			<!-- Footer -->
+			<footer id="footer">
+				<div class="inner">
+				</div>
+			</footer>
+
+		<!-- Scripts -->
+			<script src="static/js/jquery.min.js"></script>
+			<script src="static/js/skel.min.js"></script>
+			<script src="static/js/util.js"></script>
+			<script src="static/js/main.js"></script>
+
+	</body>
+</html>
