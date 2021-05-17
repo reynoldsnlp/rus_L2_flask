@@ -3,53 +3,41 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<!-- Points this page to the CSS file. -->
+	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 	<link rel="stylesheet" type="text/css" href={{ url_for('static', filename='css/main.css') }}>
-<style>
-.float-container {
-    padding: 20px;
-}
-
-.float-child {
-    width: 50%;
-    float: left;
-    padding: 20px;
-}
-</style>
 </head>
-<body>
-	<header>
-		<h3>Russian analysis results</h3>
-	</header>
-	<div class="float-container">
-		<div class="float-child">
-			{{ text_html|safe }}
-		</div>
-		<div class="float-child">
-			<iframe width="100%"
-				height="600px"
-				name="explanation"
-				scrolling="yes">
-			</iframe>
-		</div>
-	</div>
 
-	<footer>
-		<p>Powered by <a href="https://github.com/reynoldsnlp/udar">udar</a>.</p>
-	</footer>
+<body>
+<header class="title">
+	<h3>RuMOR</h3>
+</header>
+<!--
+<p>Russian Mentor for Orthographic Rules</p>
+-->
+
+
+<div class="columns">
+	<div class="column">
+		<div id="text" class="box">{{ text_html|safe }}</div>
+	</div>
+	<div class="column is-narrow">
+		<div id="error_readings" class="box"></div>
+	</div>
+	<div class="column">
+		<div id="explanation" class="box content"></div>
+	</div>
+</div>
+
+<p>
+	<a class="button is-clickable is-link" href="/">Start over</a>
+</p>
+
+<footer class="footer">
+	<p>Powered by <a href="https://github.com/reynoldsnlp/udar">udar</a>.</p>
+</footer>
+
 </body>
 
-<footer id="footer">
-		<div class="inner">
-		</div>
-	</footer>
-<!-- Script for building and displaying the sorted words. -->
-<script src="{{ url_for('static', filename='w3.js')  }}"></script>
-
-<!-- Css Scripts -->
-<script src="static/js/jquery.min.js"></script>
-<script src="static/js/skel.min.js"></script>
-<script src="static/js/util.js"></script>
 <script src="static/js/main.js"></script>
 
 </html>

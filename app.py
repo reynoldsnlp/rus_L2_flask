@@ -1,5 +1,7 @@
 """Flask webapp to sort Russian words by frequency."""
-from random import choice
+
+import json
+import re
 
 from flask import Flask
 from flask import request
@@ -35,28 +37,45 @@ def freq_form_post():
 
 def doc2html(doc):
     """Convert udar.Document to html marking L2 errors using <span> tags."""
-    return ' '.join(tok2html(tok) for tok in doc)
+
+    return re.sub(r' [.?!]', '', ' '.join(tok2html(tok) for tok in doc))
 
 
 def tok2html(tok):
-    """Convert udar.Token to html <a>."""
-    url_base = 'https://reynoldsnlp.github.io/Reynolds_UiT_ProfII/html/'
+    """Convert udar.Token to html <span>.
+
+    The data-err attribute has the following structure:
+        {lemma: {uniq_tag(s): [[err1, err2], corrected],
+                 uniq_tag(s): [[err1], corrected],
+         lemma2: ...}
+
+    """
     if tok.is_L2_error():
-        L2_error_tags = {tag.name.replace('Err/L2_', '')
-                         for reading in tok.readings
-                         for subreading in reading.subreadings
-                         for tag in subreading
-                         if tag.is_L2_error}
-        corrected = ' '.join({reading.generate(corrected=True)
-                              for reading in tok.readings})
-        title = f'''title="{' '.join(L2_error_tags)} {corrected}" '''
-        if len(L2_error_tags) > 1:
-            class_ = f'class="err multi-err" '
-        else:
-            class_ = 'class="err" '
-        err = choice(list(L2_error_tags))
-        href = f'href="{url_base}{err}.html"'
-        return f'''\n<a {class_}{title}{href} target="explanation">{tok.text}</a>'''
+        err_list = []
+        already_seen = set()
+        for reading in tok.readings:
+            corrected = reading.generate(corrected=True)
+            uniq_tags = [tag.name for tag in reading
+                         if all(tag not in reading2
+                                for reading2 in tok.readings
+                                if reading2 is not reading)]
+            L2_error_tags = sorted(tag.name.replace('Err/L2_', '')
+                                   for tag in reading
+                                   if tag.is_L2_error)
+            signature = (tuple(reading.lemmas), tuple(L2_error_tags), corrected)
+            if signature in already_seen:
+                continue
+            else:
+                already_seen.add(signature)
+            err_list.append({'lemma': ' '.join(reading.lemmas),
+                             'tags': [tag.name for tag in reading.grouped_tags],
+                             'uniq_tags': uniq_tags,
+                             'L2_error_tags': L2_error_tags,
+                             'corrected': corrected})
+        # title = f'''title="{' '.join(all_L2_error_tags)} {corrected}" '''
+        err_json = json.dumps(err_list, ensure_ascii=False)
+        print(err_json)
+        return f'''\n<span class="tag err is-clickable is-link" data-errs='{err_json}' onclick="click_err(this)">{tok.text}</span>'''
     else:
         return tok.text
 

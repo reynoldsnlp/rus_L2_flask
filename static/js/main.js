@@ -1,66 +1,52 @@
-/*
-	Theory by TEMPLATED
-	templated.co @templatedco
-	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
-*/
+click_err = function(elem) {
+	// alert(elem.dataset.errs);
 
-(function($) {
+	err_tokens = document.getElementsByClassName("err");
+	for (var i = 0; i < err_tokens.length; i++) {
+		err_tokens[i].classList.remove("is-primary");
+		err_tokens[i].classList.add("is-link");
+	}
+	elem.classList.add("is-primary");
+	elem.classList.remove("is-link");
 
-	// Breakpoints.
-		skel.breakpoints({
-			xlarge:	'(max-width: 1680px)',
-			large:	'(max-width: 1280px)',
-			medium:	'(max-width: 980px)',
-			small:	'(max-width: 736px)',
-			xsmall:	'(max-width: 480px)'
-		});
+	err_json = JSON.parse(elem.dataset.errs);
+	readings = '<table class="table"><tr><th>Dictionary<br>form</th><th>Error(s)</th><th>Corrected to...<br>(hover/click to see)</th></tr>'
+	for (var i = 0; i < err_json.length; i++) {
+		r = err_json[i]
+		readings += "<tr>"
+		readings += "<td><span class=lemma>" + r.lemma + "</span></td> "
+		readings += "<td>"
+		for (var j = 0; j < r.L2_error_tags.length; j++) {
+			readings += '<span class="tag is-clickable is-link L2_err_tag" onclick="fetch_and_load_err_html(this, \'' + r.L2_error_tags[j] + '\')">' + r.L2_error_tags[j] + "</span> "
+		}
+		readings += "</td>"
+		readings += '<td><span class="spoiler">' + r.corrected + "</span></td>"
+		readings += "</tr>"
+	}
+	readings += "</table>"
 
-	$(function() {
+	err_readings_div = document.getElementById("error_readings");
+	err_readings_div.innerHTML = readings;
+}
 
-		var	$window = $(window),
-			$body = $('body');
+fetch_and_load_err_html = function(elem, err) {
+	err_tags = document.getElementsByClassName("L2_err_tag");
+	for (var i = 0; i < err_tags.length; i++) {
+		err_tags[i].classList.remove("is-primary");
+		err_tags[i].classList.add("is-link");
+	}
+	elem.classList.add("is-primary");
+	elem.classList.remove("is-link");
 
-		// Disable animations/transitions until the page has loaded.
-			$body.addClass('is-loading');
+	var response = fetch('https://reynoldsnlp.github.io/Reynolds_UiT_ProfII/html/' + err + '.html')
+	.then(response => response.text())
+	.then(explanation_src => load_err_html(explanation_src));
+}
 
-			$window.on('load', function() {
-				window.setTimeout(function() {
-					$body.removeClass('is-loading');
-				}, 100);
-			});
-
-		// Prioritize "important" elements on medium.
-			skel.on('+medium -medium', function() {
-				$.prioritize(
-					'.important\\28 medium\\29',
-					skel.breakpoint('medium').active
-				);
-			});
-
-	// Off-Canvas Navigation.
-
-		// Navigation Panel.
-			$(
-				'<div id="navPanel">' +
-					$('#nav').html() +
-					'<a href="#navPanel" class="close"></a>' +
-				'</div>'
-			)
-				.appendTo($body)
-				.panel({
-					delay: 500,
-					hideOnClick: true,
-					hideOnSwipe: true,
-					resetScroll: true,
-					resetForms: true,
-					side: 'left'
-				});
-
-		// Fix: Remove transitions on WP<10 (poor/buggy performance).
-			if (skel.vars.os == 'wp' && skel.vars.osVersion < 10)
-				$('#navPanel')
-					.css('transition', 'none');
-
-	});
-
-})(jQuery);
+load_err_html = function(src) {
+	var parser = new DOMParser();
+	var htmlDoc = parser.parseFromString(src, 'text/html');
+	var body = htmlDoc.getElementsByTagName("body");
+	var explanation_div = document.getElementById("explanation");
+	explanation_div.innerHTML = body[0].innerHTML;
+}
