@@ -17,7 +17,7 @@ click_err = function(elem) {
 		readings += "<td><span class=lemma>" + r.lemma + "</span></td> "
 		readings += "<td>"
 		for (var j = 0; j < r.L2_error_tags.length; j++) {
-			readings += '<span class="tag is-clickable is-link L2_err_tag" onclick="fetch_and_load_err_html(this)">' + r.L2_error_tags[j] + "</span> "
+			readings += '<span class="tag is-clickable is-link is-medium L2_err_tag" onclick="fetch_and_load_err_html(this)">' + r.L2_error_tags[j] + "</span> "
 		}
 		readings += "</td>"
 		readings += '<td><span class="icon"><i class="fas fa-eye-slash"></i></span><span class="spoiler">' + r.corrected + "</span></td>"

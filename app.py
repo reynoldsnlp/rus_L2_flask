@@ -12,8 +12,8 @@ import udar
 
 Sharoff_lem_freq_dict = udar.features.features._get_Sharoff_lem_freq_dict()
 
-print('Ана не хочит мить пасуду в кафетерие, но мы скозали эй, что обизателно надо.',
-      file=sys.stderr)
+# The following sentence is used if the user enters nothing
+EXAMPLE_SENT = 'ПРИМЕР: Ана не хочит мить пасуду в кафетерие, но мы скозали эй, что обизателно надо.'
 
 app = Flask(__name__)
 application = app  # our hosting requires `application` in passenger_wsgi
@@ -26,7 +26,8 @@ def freq_form_post():
     if request.method == 'GET':
         return render_template("entry_form.html")
     elif request.method == 'POST':
-        doc = udar.Document(request.form['text'], analyze_L2_errors=True)
+        text = request.form['text'].strip() or EXAMPLE_SENT
+        doc = udar.Document(text, analyze_L2_errors=True)
         text_html = doc2html(doc)
         return render_template('output.html', text_html=text_html)
 
@@ -74,7 +75,7 @@ def tok2html(tok):
         # title = f'''title="{' '.join(all_L2_error_tags)} {corrected}" '''
         err_json = json.dumps(err_list, ensure_ascii=False)
         print(err_json)
-        return f'''\n<span class="tag err is-clickable is-link" data-errs='{err_json}' onclick="click_err(this)">{tok.text}</span>'''
+        return f'''\n<span class="tag err is-clickable is-link is-medium" data-errs='{err_json}' onclick="click_err(this)">{tok.text}</span>'''
     else:
         return tok.text
 
