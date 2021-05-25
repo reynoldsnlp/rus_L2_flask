@@ -1,7 +1,8 @@
-"""Flask webapp to sort Russian words by frequency."""
+"""Flask webapp to automatically correct Russian L2 errors."""
 
 import json
 import re
+import sys
 
 from flask import Flask
 from flask import request
@@ -9,19 +10,14 @@ from flask import render_template
 # from flask import url_for
 import udar
 
+Sharoff_lem_freq_dict = udar.features.features._get_Sharoff_lem_freq_dict()
+
+print('Ана не хочит мить пасуду в кафетерие, но мы скозали эй, что обизателно надо.',
+      file=sys.stderr)
+
 app = Flask(__name__)
 application = app  # our hosting requires `application` in passenger_wsgi
 
-
-def absent():
-    """Used as default in defaultdict's."""
-    return 0
-
-
-# @app.route('/')
-# def freq_form():
-#     """Start page."""
-#     return render_template("freq_form.html")
 
 # passenger sets '/' to be the path registered in cPanel
 @app.route('/', methods=['GET', 'POST'])
@@ -53,7 +49,9 @@ def tok2html(tok):
     if tok.is_L2_error():
         err_list = []
         already_seen = set()
-        for reading in tok.readings:
+        for reading in sorted(tok.readings,
+                              key=lambda x: Sharoff_lem_freq_dict.get(' '.join(x.lemmas), 0),
+                              reverse=True):
             corrected = reading.generate(corrected=True)
             uniq_tags = [tag.name for tag in reading
                          if all(tag not in reading2
@@ -71,7 +69,8 @@ def tok2html(tok):
                              'tags': [tag.name for tag in reading.grouped_tags],
                              'uniq_tags': uniq_tags,
                              'L2_error_tags': L2_error_tags,
-                             'corrected': corrected})
+                             'corrected': corrected,
+                             'freq': Sharoff_lem_freq_dict.get(' '.join(reading.lemmas), 0)})
         # title = f'''title="{' '.join(all_L2_error_tags)} {corrected}" '''
         err_json = json.dumps(err_list, ensure_ascii=False)
         print(err_json)
