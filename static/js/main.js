@@ -1,3 +1,9 @@
+isVisible = function(elm) {
+	var rect = elm.getBoundingClientRect();
+	var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+	return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
+  }
+
 click_err = function(elem) {
 	// alert(elem.dataset.errs);
 
@@ -58,7 +64,7 @@ load_err_html = function(src) {
 	var body = htmlDoc.getElementsByTagName("body");
 	var explanation_div = document.getElementById("explanation");
 	explanation_div.innerHTML = body[0].innerHTML;
-	if (explanation_div.innerHTML != "") {
+	if (explanation_div.innerHTML != "" && !isVisible(explanation_div)) {
 		explanation_div.scrollIntoView({"behavior": "smooth"})
 	}
 }
