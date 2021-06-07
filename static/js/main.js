@@ -1,3 +1,19 @@
+localization_lang = "eng";
+
+set_lang = function(new_lang) {
+	localization_lang = new_lang;
+
+	lang_tags = document.getElementsByClassName("lang");
+	for (var i = 0; i < lang_tags.length; i++) {
+		lang_tags[i].classList.remove("is-primary");
+		lang_tags[i].classList.add("is-link");
+	}
+
+	new_lang_tags = document.getElementsByClassName(new_lang);
+	new_lang_tags[0].classList.add("is-primary");
+	new_lang_tags[0].classList.remove("is-link");
+}
+
 isVisible = function(elm) {
 	var rect = elm.getBoundingClientRect();
 	var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
@@ -53,7 +69,7 @@ fetch_and_load_err_html = function(elem) {
 	elem.classList.add("is-primary");
 	elem.classList.remove("is-link");
 
-	var response = fetch('https://reynoldsnlp.github.io/Reynolds_UiT_ProfII/html/' + elem.innerHTML + '.html')
+	var response = fetch('https://reynoldsnlp.github.io/Reynolds_UiT_ProfII/html/' + localization_lang + "/" + elem.innerHTML + '.html')
 	.then(response => response.text())
 	.then(explanation_src => load_err_html(explanation_src));
 }
