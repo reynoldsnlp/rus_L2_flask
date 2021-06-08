@@ -1,17 +1,42 @@
 localization_lang = "eng";
 
+err_display = {
+	"a2o": "o→a",
+	"e2je": "e→э",
+	"FV": "no fill vowel",
+	"H2S": "ъ→ь",
+	"i2j": "й→и",
+	"i2y": "ы→и",
+	"ii": "ие→ии",
+	"Ikn": "и→е/я/а",
+	"j2i": "и→й",
+	"je2e": "э→е",
+	"NoFV": "add fill vowel",
+	"NoGem": "add double letter",
+	"NoSS": "add ь",
+	"o2a": "a→o",
+	"Pal": "add softening",
+	"sh2shch": "щ→ш",
+	"shch2sh": "ш→щ",
+	"ski": "ский→ски",
+	"SRo": "о→е",
+	"SRy": "ы→и",
+	"y2i": "и→ы",
+	"prijti": "прийти",
+	"revIkn": "е/я/а→и",
+	"Gem": "no double letter",
+}
+
 set_lang = function(new_lang) {
 	localization_lang = new_lang;
 
 	lang_tags = document.getElementsByClassName("lang");
 	for (var i = 0; i < lang_tags.length; i++) {
-		lang_tags[i].classList.remove("is-primary");
-		lang_tags[i].classList.add("is-link");
+		lang_tags[i].classList.add("is-light");
 	}
 
 	new_lang_tags = document.getElementsByClassName(new_lang);
-	new_lang_tags[0].classList.add("is-primary");
-	new_lang_tags[0].classList.remove("is-link");
+	new_lang_tags[0].classList.remove("is-light");
 }
 
 isVisible = function(elm) {
@@ -39,10 +64,10 @@ click_err = function(elem) {
 		readings += "<td><span class=lemma>" + r.lemma + "</span></td> "
 		readings += "<td>"
 		for (var j = 0; j < r.L2_error_tags.length; j++) {
-			readings += '<span class="tag is-clickable is-link is-medium L2_err_tag" onclick="fetch_and_load_err_html(this)">' + r.L2_error_tags[j] + "</span> "
+			readings += '<span class="tag is-clickable is-link is-medium L2_err_tag" onclick="fetch_and_load_err_html(this, \'' + r.L2_error_tags[j] + '\')">' + err_display[r.L2_error_tags[j]] + "</span> "
 		}
 		readings += "</td>"
-		readings += '<td><span class="icon"><i class="fas fa-eye-slash"></i></span><span class="spoiler">' + r.corrected + "</span></td>"
+		readings += '<td><button class="button is-info is-light"><span class="icon"><i class="fas fa-eye-slash"></i></span><span class="button is-info is-inverted is-light is-outlined">' + r.corrected + "</span></button></td>"
 		readings += "</tr>"
 	}
 	readings += "</table>"
@@ -53,14 +78,14 @@ click_err = function(elem) {
 	if (err_json.length == 1) {
 		if (err_json[0].L2_error_tags.length == 1) {
 			err_tags = err_readings_div.getElementsByClassName("L2_err_tag");
-			fetch_and_load_err_html(err_tags[0])
+			err_tags[0].click()
 		}
 	} else {
 		load_err_html("")
 	}
 }
 
-fetch_and_load_err_html = function(elem) {
+fetch_and_load_err_html = function(elem, err_id) {
 	err_tags = document.getElementsByClassName("L2_err_tag");
 	for (var i = 0; i < err_tags.length; i++) {
 		err_tags[i].classList.remove("is-primary");
@@ -69,7 +94,7 @@ fetch_and_load_err_html = function(elem) {
 	elem.classList.add("is-primary");
 	elem.classList.remove("is-link");
 
-	var response = fetch('https://reynoldsnlp.github.io/Reynolds_UiT_ProfII/html/' + localization_lang + "/" + elem.innerHTML + '.html')
+	var response = fetch('https://reynoldsnlp.github.io/Reynolds_UiT_ProfII/html/' + localization_lang + "/" + err_id + '.html')
 	.then(response => response.text())
 	.then(explanation_src => load_err_html(explanation_src));
 }
