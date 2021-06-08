@@ -86,9 +86,6 @@ set_lang = function(new_lang) {
 	new_lang_tags = document.getElementsByClassName(new_lang);
 	new_lang_tags[0].classList.remove("is-light");
 
-	err_tags = document.getElementsByClassName("tag L2_err_tag is-primary");
-	err_tags[0].click();
-
 	tbl_headers = document.getElementsByTagName("th");
 	for (var i = 0; i < tbl_headers.length; i++) {
 		tbl_headers[i].innerHTML = l10n[l10n_lang]["tbl_headers"][i];
@@ -99,6 +96,10 @@ set_lang = function(new_lang) {
 
 	powered = document.getElementById("powered");
 	powered.innerHTML = l10n[l10n_lang]["powered"];
+
+	//Keep this last; it can fail if no explanation is currently displayed
+	err_tags = document.getElementsByClassName("tag L2_err_tag is-primary");
+	err_tags[0].click();
 }
 
 isVisible = function(elm) {
