@@ -1,34 +1,82 @@
-localization_lang = "eng";
+l10n_lang = "eng";
 
-err_display = {
-	"a2o": "o→a",
-	"e2je": "e→э",
-	"FV": "no fill vowel",
-	"H2S": "ъ→ь",
-	"i2j": "й→и",
-	"i2y": "ы→и",
-	"ii": "ие→ии",
-	"Ikn": "и→е/я/а",
-	"j2i": "и→й",
-	"je2e": "э→е",
-	"NoFV": "add fill vowel",
-	"NoGem": "add double letter",
-	"NoSS": "add ь",
-	"o2a": "a→o",
-	"Pal": "add softening",
-	"sh2shch": "щ→ш",
-	"shch2sh": "ш→щ",
-	"ski": "ский→ски",
-	"SRo": "о→е",
-	"SRy": "ы→и",
-	"y2i": "и→ы",
-	"prijti": "прийти",
-	"revIkn": "е/я/а→и",
-	"Gem": "no double letter",
+l10n = {
+	"eng": {
+		"errors": {
+			"a2o": "o→a",
+			"e2je": "e→э",
+			"FV": "no fill vowel",
+			"H2S": "ъ→ь",
+			"i2j": "й→и",
+			"i2y": "ы→и",
+			"ii": "ие→ии",
+			"Ikn": "и→е/я/а",
+			"j2i": "и→й",
+			"je2e": "э→е",
+			"NoFV": "add fill vowel",
+			"NoGem": "add double letter",
+			"NoSS": "add ь",
+			"o2a": "a→o",
+			"Pal": "add softening",
+			"sh2shch": "щ→ш",
+			"shch2sh": "ш→щ",
+			"ski": "ский→ски",
+			"SRo": "о→е",
+			"SRy": "ы→и",
+			"y2i": "и→ы",
+			"prijti": "прийти",
+			"revIkn": "е/я/а→и",
+			"Gem": "no double letter",
+		},
+		"tbl_headers": {
+			0: "Dictionary<br>form",
+			1: "Error(s)",
+			2: "Corrected to...<br>(hover/click to see)",
+		},
+		"restart": "Start over",
+		"powered": "Powered by",
+	},
+
+	"nob": {
+		"errors": {
+			"a2o": "o→a",
+			"e2je": "e→э",
+			"FV": "no fill vowel",
+			"H2S": "ъ→ь",
+			"i2j": "й→и",
+			"i2y": "ы→и",
+			"ii": "ие→ии",
+			"Ikn": "и→е/я/а",
+			"j2i": "и→й",
+			"je2e": "э→е",
+			"NoFV": "add fill vowel",
+			"NoGem": "add double letter",
+			"NoSS": "add ь",
+			"o2a": "a→o",
+			"Pal": "add softening",
+			"sh2shch": "щ→ш",
+			"shch2sh": "ш→щ",
+			"ski": "ский→ски",
+			"SRo": "о→е",
+			"SRy": "ы→и",
+			"y2i": "и→ы",
+			"prijti": "прийти",
+			"revIkn": "е/я/а→и",
+			"Gem": "no double letter",
+		},
+		"tbl_headers": {
+			0: "norsk Dictionary<br>form",
+			1: "norsk Error(s)",
+			2: "norsk Corrected to...<br>(hover/click to see)",
+		},
+		"restart": "norsk Start over",
+		"powered": "norsk Powered by",
+	},
 }
 
+
 set_lang = function(new_lang) {
-	localization_lang = new_lang;
+	l10n_lang = new_lang;
 
 	lang_tags = document.getElementsByClassName("lang");
 	for (var i = 0; i < lang_tags.length; i++) {
@@ -37,6 +85,20 @@ set_lang = function(new_lang) {
 
 	new_lang_tags = document.getElementsByClassName(new_lang);
 	new_lang_tags[0].classList.remove("is-light");
+
+	err_tags = document.getElementsByClassName("tag L2_err_tag is-primary");
+	err_tags[0].click();
+
+	tbl_headers = document.getElementsByTagName("th");
+	for (var i = 0; i < tbl_headers.length; i++) {
+		tbl_headers[i].innerHTML = l10n[l10n_lang]["tbl_headers"][i];
+	}
+
+	restart_button = document.getElementById("restart");
+	restart_button.innerHTML = l10n[l10n_lang]["restart"];
+
+	powered = document.getElementById("powered");
+	powered.innerHTML = l10n[l10n_lang]["powered"];
 }
 
 isVisible = function(elm) {
@@ -57,14 +119,18 @@ click_err = function(elem) {
 	elem.classList.remove("is-link");
 
 	err_json = JSON.parse(elem.dataset.errs);
-	readings = '<table class="table"><tr><th>Dictionary<br>form</th><th>Error(s)</th><th>Corrected to...<br>(hover/click to see)</th></tr>'
+	readings = '<table class="table"><tr>'
+	readings += '<th>' + l10n[l10n_lang]['tbl_headers'][1] + '</th>'
+	readings += '<th>' + l10n[l10n_lang]['tbl_headers'][2] + '</th>'
+	readings += '<th>' + l10n[l10n_lang]['tbl_headers'][3] + '</th>'
+	readings += '</tr>'
 	for (var i = 0; i < err_json.length; i++) {
 		r = err_json[i]
 		readings += "<tr>"
 		readings += "<td><span class=lemma>" + r.lemma + "</span></td> "
 		readings += "<td>"
 		for (var j = 0; j < r.L2_error_tags.length; j++) {
-			readings += '<span class="tag is-clickable is-link is-medium L2_err_tag" onclick="fetch_and_load_err_html(this, \'' + r.L2_error_tags[j] + '\')">' + err_display[r.L2_error_tags[j]] + "</span> "
+			readings += '<span class="tag is-clickable is-link is-medium L2_err_tag" onclick="fetch_and_load_err_html(this, \'' + r.L2_error_tags[j] + '\')">' + l10n[l10n_lang]["errors"][r.L2_error_tags[j]] + "</span> "
 		}
 		readings += "</td>"
 		readings += '<td><button class="button is-info is-light"><span class="icon"><i class="fas fa-eye-slash"></i></span><span class="button is-info is-inverted is-light is-outlined">' + r.corrected + "</span></button></td>"
@@ -94,7 +160,7 @@ fetch_and_load_err_html = function(elem, err_id) {
 	elem.classList.add("is-primary");
 	elem.classList.remove("is-link");
 
-	var response = fetch('https://reynoldsnlp.github.io/Reynolds_UiT_ProfII/html/' + localization_lang + "/" + err_id + '.html')
+	var response = fetch('https://reynoldsnlp.github.io/Reynolds_UiT_ProfII/html/' + l10n_lang + "/" + err_id + '.html')
 	.then(response => response.text())
 	.then(explanation_src => load_err_html(explanation_src));
 }
