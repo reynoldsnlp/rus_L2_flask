@@ -27,7 +27,7 @@ def freq_form_post():
         return render_template("entry_form.html")
     elif request.method == 'POST':
         text = request.form['text'].strip() or EXAMPLE_SENT
-        doc = udar.Document(text, analyze_L2_errors=True)
+        doc = udar.Document(text, analyze_L2_errors=True, disambiguate=True)
         text_html = doc2html(doc)
         return render_template('output.html', text_html=text_html)
 
