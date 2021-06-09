@@ -75,7 +75,7 @@ def tok2html(tok):
         # title = f'''title="{' '.join(all_L2_error_tags)} {corrected}" '''
         err_json = json.dumps(err_list, ensure_ascii=False)
         print(err_json)
-        return f'''\n<span class="tag err is-clickable is-link is-medium" data-errs='{err_json}' onclick="click_err(this)">{tok.text}</span>'''
+        return f'''\n<a class="err has-text-link" data-errs='{err_json}' onclick="click_err(this)">{tok.text}</a>'''
     else:
         return tok.text
 
