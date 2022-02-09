@@ -174,7 +174,7 @@ fetch_and_load_err_html = function (elem, err_id) {
 		}
 	}
 
-	var response = fetch('https://reynoldsnlp.github.io/Reynolds_UiT_ProfII/html/' + l10n_lang + "/" + err_id + '.html')
+	var response = fetch('https://reynoldsnlp.github.io/rus_grammar_explanations/html/' + l10n_lang + "/" + err_id + '.html')
 		.then(response => response.text())
 		.then(explanation_src => load_err_html(explanation_src));
 }
