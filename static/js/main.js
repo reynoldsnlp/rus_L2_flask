@@ -32,7 +32,7 @@ l10n = {
 		"tbl_headers": {
 			0: "Dictionary<br>form",
 			1: "Error(s)",
-			2: "Corrected to...<br>(hover/click to see)",
+			2: "Corrected to...<br>(hover/tap to see)",
 		},
 		"restart": "Start over",
 		"powered": "Powered by",
