@@ -1,0 +1,74 @@
+{
+  "eng": {
+    "error_display_name": {
+      "a2o": "o→a",
+      "e2je": "e→э",
+      "FV": "no fill vowel",
+      "H2S": "ъ→ь",
+      "i2j": "й→и",
+      "i2y": "ы→и",
+      "ii": "ие→ии",
+      "Ikn": "и→е/я/а",
+      "j2i": "и→й",
+      "je2e": "э→е",
+      "NoFV": "add fill vowel",
+      "NoGem": "add double letter",
+      "NoSS": "add ь",
+      "o2a": "a→o",
+      "Pal": "keep consonant soft",
+      "sh2shch": "щ→ш",
+      "shch2sh": "ш→щ",
+      "ski": "ский→ски",
+      "SRo": "о→е",
+      "SRy": "ы→и",
+      "y2i": "и→ы",
+      "prijti": "прийти",
+      "revIkn": "е/я/а→и",
+      "Gem": "no double letter"
+    },
+    "does_not_exist": "does not exist in Russian. Did you mean one of these?",
+    "tbl_headers": [
+      "Dictionary<br>form",
+      "Error(s)",
+      "Corrected to...<br>(hover/tap to see)"
+    ],
+    "restart": "Start over",
+    "powered": "Powered by"
+  },
+  "nob": {
+    "error_display_name": {
+      "a2o": "o→a",
+      "e2je": "e→э",
+      "FV": "ingen flyktig vokal",
+      "H2S": "ъ→ь",
+      "i2j": "й→и",
+      "i2y": "ы→и",
+      "ii": "ие→ии",
+      "Ikn": "и→е/я/а",
+      "j2i": "и→й",
+      "je2e": "э→е",
+      "NoFV": "legg til en flyktig vokal",
+      "NoGem": "legg til en dobbelt bokstav",
+      "NoSS": "legg til ь",
+      "o2a": "a→o",
+      "Pal": "gjør konsonanten bløt",
+      "sh2shch": "щ→ш",
+      "shch2sh": "ш→щ",
+      "ski": "ский→ски",
+      "SRo": "о→е",
+      "SRy": "ы→и",
+      "y2i": "и→ы",
+      "prijti": "прийти",
+      "revIkn": "е/я/а→и",
+      "Gem": "ingen dobbelt bokstav"
+    },
+    "does_not_exist": "finnes ikke på russisk. Mente du en av disse?",
+    "tbl_headers": [
+      "Ordbokform",
+      "Feil",
+      "korrigert til...<br>hold markøren over eller klikk)"
+    ],
+    "restart": "Begynn på nytt",
+    "powered": "Drevet av"
+  }
+}
