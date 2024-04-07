@@ -29,7 +29,7 @@ l10n_lang = DEFAULT_UI_LANG
 
 @app.get('/')
 def index():
-    lang = request.args.get("rumor-l10n-lang", l10n_lang)
+    lang = request.cookies.get("rumor-l10n-lang", l10n_lang)
     return render_template("index.html", l10n=l10n[lang])
 
 
@@ -51,7 +51,7 @@ def entry_form():
 
 @app.post('/error-list')
 def error_list():
-    lang = request.args.get("rumor-l10n-lang", l10n_lang)
+    lang = request.cookies.get("rumor-l10n-lang", l10n_lang)
     error_json = request.form.get('error-list', "").replace('`', '"')  # TODO ticks are brittle
     tok_id = request.form.get('id', "")
     orig = request.form.get('orig', "")
