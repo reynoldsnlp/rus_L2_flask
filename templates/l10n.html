@@ -1,0 +1,17 @@
+{% include 'l10n/l10n-buttons.html' %}
+
+<div id="powered" hx-swap-oob="true">
+  {% include 'l10n/powered.html' %}
+</div>
+
+<div id="restart" hx-swap-oob="true">
+  {% include 'l10n/restart.html' %}
+</div>
+
+<table>  <!-- TODO FIX table tag required to get tr to be recognized, but empty tables are being added to index.html's <header> -->
+<tr id="error-list-headers" hx-swap-oob="true">
+  {% include 'l10n/error-list-headers.html' %}
+</tr>
+</table>
+
+<span id="does-not-exist" hx-swap-oob="true">{{ l10n["does_not_exist"] }}</span>

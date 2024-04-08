@@ -1,24 +1,20 @@
 <div id="output">
 
-<div>
-	<button id="restart"
-	        class="button is-clickable is-light is-link is-outlined"
-		hx-get="/entry-form"
-		hx-target="#output"
-		hx-swap="OuterHTML"> {{ l10n["restart"] }}</button>
+<div id="restart">
+  {% include 'l10n/restart.html' %}
 </div>
 
 <hr>
 
 <div class="columns">
-	<div class="column">
-		<div id="text" class="box">{{ text_html|safe }}</div>
-	</div>
-	<div class="column is-narrow">
-		<div id="error-list" class="box"></div>
-	</div>
-	<div class="column">
-		<div id="explanation" class="box content"></div>
-	</div>
+  <div class="column">
+    <div id="text" class="box">{{ text_html|safe }}</div>
+  </div>
+  <div class="column is-narrow">
+    <div id="error-list" class="box"></div>
+  </div>
+  <div class="column">
+    <div id="explanation" class="box content"></div>
+  </div>
 </div>
 </div>

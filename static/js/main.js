@@ -1,25 +1,4 @@
-setLang = function (newLang, l10n) {
-	langTags = document.getElementsByClassName("lang");
-	for (let i in langTags) {
-		langTags[i]?.classList?.add("is-light");
-	}
-	newLangTags = document.getElementsByClassName(newLang);
-	newLangTags[0]?.classList?.remove("is-light");
-
-	tblHeaders = document.getElementsByTagName("th");
-	for (let i in tblHeaders) {
-		tblHeaders[i].innerHTML = l10n["tbl_headers"][i];
-	}
-
-	restartButton = document.getElementById("restart");
-	if (restartButton) { restartButton.innerHTML = l10n["restart"] }
-
-	powered = document.getElementById("powered");
-	if (powered) { powered.innerHTML = l10n["powered"] }
-
-	doesNotExist = document.getElementById("does-not-exist");
-	if (doesNotExist) { doesNotExist.innerHTML = l10n["does_not_exist"] }
-
+setL10nLangForHighlightedTokenAndTag = function (newLang) {
 	table = document.querySelector("table.error-list");
 	if (table) {
 		tokId = table.getAttribute("data-tok-id")

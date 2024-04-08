@@ -1,31 +1,31 @@
 <span class="tag is-medium is-primary">{{ orig }}</span>
 <span id="does-not-exist">{{ l10n["does_not_exist"] }}</span>
 <table class="table error-list" data-tok-id="{{ tok_id }}" data-highlighted-tag="">
-	<tbody>
-		<tr>
-			{% for tbl_header in l10n["tbl_headers"] %}
-			<th> {{ tbl_header|safe }}</th>
-			{% endfor %}
-		</tr>
-		{% for L2_error in errors %}
-		<tr>
-			<td><span class="lemma"> {{ L2_error["lemma"] }} </span></td>
-			<td>
-				{% for L2_tag in L2_error["L2_error_tags"] %}
-				<span class="tag is-clickable is-link is-medium is-rounded L2-err-tag {{ L2_tag }}"
-					    hx-get="/explanation/{{ l10n_lang }}/{{ L2_tag }}"
-							hx-on::before-request="highlightL2ErrTag(`{{ L2_tag }}`)"
-							hx-swap="show:top"
-							hx-target="#explanation"
-							>{{ l10n["error_display_name"][L2_tag] }}
-				</span>
-				{% endfor %}
-			</td>
-			<td>
-				{% set corrected_wordform = L2_error['corrected'] %}
-				{% include "corrected.html" %}
-			</td>
-		</tr>
-		{% endfor %}
-	</tbody>
+  <tbody>
+
+    <tr id="error-list-headers">
+      {% include 'l10n/error-list-headers.html' %}
+    </tr>
+
+    {% for L2_error in errors %}
+    <tr>
+      <td><span class="lemma"> {{ L2_error["lemma"] }} </span></td>
+      <td>
+        {% for L2_tag in L2_error["L2_error_tags"] %}
+        <span class="tag is-clickable is-link is-medium is-rounded L2-err-tag {{ L2_tag }}"
+              hx-get="/explanation/{{ l10n_lang }}/{{ L2_tag }}"
+              hx-on::before-request="highlightL2ErrTag(`{{ L2_tag }}`)"
+              hx-swap="show:top"
+              hx-target="#explanation"
+              >{{ l10n["error_display_name"][L2_tag] }}
+        </span>
+        {% endfor %}
+      </td>
+      <td>
+        {% set corrected_wordform = L2_error['corrected'] %}
+        {% include "corrected.html" %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
 </table>

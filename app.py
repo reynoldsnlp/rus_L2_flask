@@ -13,8 +13,8 @@ import udar
 Sharoff_lem_freq_dict = udar.features.features._get_Sharoff_lem_freq_dict()
 
 # The following sentence is used if the user enters nothing
-EXAMPLE_SENT = 'ПРИМЕР: Ана не хочит мить пасуду в кафетерие, но мы скозали эй, что обизателно надо.'
 DEFAULT_UI_LANG = "eng"
+EXAMPLE_SENT = 'ПРИМЕР: Ана не хочит мить пасуду в кафетерие, но мы скозали эй, что обизателно надо.'
 EXPLANATION_BASE_URL = "https://reynoldsnlp.github.io/rus_grammar_explanations/html/"
 
 app = Flask(__name__)
@@ -24,13 +24,12 @@ application = app  # our hosting requires `application` in passenger_wsgi
 
 with open("l10n.json") as f:
     l10n = json.load(f)
-l10n_lang = DEFAULT_UI_LANG
 
 
 @app.get('/')
 def index():
-    lang = request.cookies.get("rumor-l10n-lang", l10n_lang)
-    return render_template("index.html", l10n=l10n[lang])
+    l10n_lang = request.cookies.get("rumor-l10n-lang", DEFAULT_UI_LANG)
+    return render_template("index.html", l10n=l10n[l10n_lang], l10n_lang=l10n_lang)
 
 
 @app.get('/corrected/<show>/<corrected_wordform>')
@@ -51,7 +50,7 @@ def entry_form():
 
 @app.post('/error-list')
 def error_list():
-    lang = request.cookies.get("rumor-l10n-lang", l10n_lang)
+    l10n_lang = request.cookies.get("rumor-l10n-lang", DEFAULT_UI_LANG)
     error_json = request.form.get('error-list', "").replace('`', '"')  # TODO ticks are brittle
     tok_id = request.form.get('id', "")
     orig = request.form.get('orig', "")
@@ -59,8 +58,8 @@ def error_list():
         errors = json.loads(error_json)
         return render_template("error-list.html",
                                errors=errors,
-                               l10n=l10n[lang],
-                               l10n_lang=lang,
+                               l10n=l10n[l10n_lang],
+                               l10n_lang=l10n_lang,
                                orig=orig,
                                tok_id=tok_id)
     else:
@@ -73,24 +72,21 @@ def explanation(lang, L2_err_tag):
     return resp.text
 
 
-@app.get('/l10n/<lang>')
-def set_l10n_lang(lang):
-    global l10n_lang
-    l10n_lang = lang
-    resp = Response(json.dumps(l10n[lang]))
-    resp.headers['HX-Trigger'] = json.dumps({"setLang": {"newLang": lang,
-                                                         "l10n": l10n[lang]}})
-    resp.headers['Set-Cookie'] = f"rumor-l10n-lang={lang}"
+@app.get('/l10n/<l10n_lang>')
+def set_l10n_lang(l10n_lang):
+    resp = Response(render_template('l10n.html', l10n=l10n[l10n_lang], l10n_lang=l10n_lang))
+    resp.headers["HX-Trigger-After-Swap"] = f'{{"setL10nLangForHighlightedTokenAndTag": "{l10n_lang}"}}'
+    resp.headers['Set-Cookie'] = f"rumor-l10n-lang={l10n_lang}; Path=/"  # TODO: use URL args instead
     return resp
 
 
 @app.post('/process-input')
 def process_input():
-    lang = request.cookies.get("rumor-l10n-lang", l10n_lang)
+    l10n_lang = request.cookies.get("rumor-l10n-lang", DEFAULT_UI_LANG)
     text = request.form['text'].strip() or EXAMPLE_SENT
     doc = udar.Document(text, analyze_L2_errors=True, disambiguate=True)
     text_html = doc2html(doc)
-    return render_template('output.html', text_html=text_html, l10n=l10n[lang])
+    return render_template('output.html', text_html=text_html, l10n=l10n[l10n_lang])
 
 
 def doc2html(doc):
